@@ -1,0 +1,85 @@
+version: '3'
+
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - database
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
+      TZ: Africa/Kigali
+    restart: always
+    ports:
+      - 8081:80
+    networks:
+      - my-network
+
+  database:
+    container_name: database
+    image: mysql
+    command: mysqld --sql_mode="" --character-set-server=utf8 --collation-server=utf8_slovenian_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+    restart: always
+    environment:
+      MYSQL_DATABASE: users
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Africa/Kigali
+    ports:
+      - 8010:3306
+    volumes:
+      - ./server/mysql:/var/lib/mysql
+      - ./server/db:/db
+    networks:
+      - my-network
+
+  myapp:
+    container_name: myapp
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./server
+    ports:
+      - '8001:8080'
+    volumes:
+      - ./server:/app
+    depends_on:
+      - database
+      - phpmyadmin
+    environment: 
+      TZ: Africa/Kigali
+    command: npm run dev
+    networks:
+      - my-network
+    
+  client:
+    stdin_open: true
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./client
+    ports: 
+      - '8005:3000'
+    volumes: 
+      - ./client:/app
+    command: npm run start
+    networks:
+      - my-network
+    
+  nginx:
+    depends_on: 
+      - myapp
+      - client
+    restart: always
+    build: 
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports: 
+      - '3050:80'
+    networks:
+      - my-network
+
+networks:
+  my-network:
