@@ -47,7 +47,7 @@
 #       dockerfile: Dockerfile.dev
 #       context: ./server
 #     ports:
-#       - '8001:8080'
+#       - '8001:5000'
 #     volumes:
 #       - ./server:/app
 #     depends_on:
@@ -81,7 +81,7 @@
 #       dockerfile: Dockerfile.dev
 #       context: ./nginx
 #     ports: 
-#       - '3051:81'
+#       - '3051:80'
 #     networks:
 #       - my-network
 
@@ -89,7 +89,7 @@
 #   my-network:
 
 # PRODUCTION
-#------------
+# ------------
 
 
 version: '3'
@@ -139,7 +139,7 @@ services:
       dockerfile: Dockerfile
       context: ./server
     ports:
-      - '8001:8080'
+      - '8001:5000'
     volumes:
       - ./server:/app
     depends_on:

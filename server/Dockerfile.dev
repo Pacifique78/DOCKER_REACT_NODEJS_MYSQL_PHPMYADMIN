@@ -6,3 +6,5 @@ RUN npm install -g nodemon
 RUN npm install -g sequelize
 RUN npm install
 COPY . /app/
+
+EXPOSE 5000

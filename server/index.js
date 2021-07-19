@@ -12,22 +12,19 @@ const Customer = db.Customer;
 let router = require('./app/routers/router.js');
 
 const cors = require('cors');
-const corsOptions = {
-  origin: 'http://localhost:4200',
-  optionsSuccessStatus: 200,
-};
-app.use(cors(corsOptions));
+
+app.use(cors());
 
 app.use(bodyParser.json());
-app.use(express.static('resources'));
-app.use('/', router);
+app.use(express.static("resources"));
+app.use("/", router);
 
 // Create a Server
-const server = app.listen(8080, function () {
+const server = app.listen(5000, function () {
   let host = server.address().address;
   let port = server.address().port;
 
-  console.log('App listening at http://%s:%s', host, port);
+  console.log("App listening at http://%s:%s", host, port);
 });
 
 try {
