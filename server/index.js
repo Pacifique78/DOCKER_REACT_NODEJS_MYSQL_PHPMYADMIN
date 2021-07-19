@@ -32,32 +32,32 @@ const server = app.listen(8080, function () {
 
 try {
   db.sequelize.authenticate();
-  console.log("Success!!");
+  console.log('Success!!');
 } catch (err) {
-  console.error("Unable to connect to the database:", err);
+  console.error('Unable to connect to the database:', err);
 }
 db.sequelize.sync({ force: true, alter: true }).then(() => {
   // console.log('object');
-  console.log("Drop and Resync with { force: true }");
+  console.log('Drop and Resync with { force: true }');
   Customer.sync().then(() => {
     const customers = [
       {
-        firstname: "Jack",
-        lastname: "Smith",
+        firstname: 'Jack',
+        lastname: 'Smith',
         age: 23,
-        address: "374 William S Canning Blvd",
+        address: '374 William S Canning Blvd',
       },
       {
-        firstname: "Adam",
-        lastname: "Johnson",
+        firstname: 'Adam',
+        lastname: 'Johnson',
         age: 31,
-        address: "Fall River MA 2721. 121 Worcester Rd",
+        address: 'Fall River MA 2721. 121 Worcester Rd',
       },
       {
-        firstname: "Dana",
-        lastname: "Bay",
+        firstname: 'Dana',
+        lastname: 'Bay',
         age: 46,
-        address: "Framingham MA 1701. 677 Timpany Blvd",
+        address: 'Framingham MA 1701. 677 Timpany Blvd',
       },
     ];
 
