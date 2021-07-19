@@ -10,7 +10,7 @@ RUN cd serve && npm start
 # RUN npm i -g serve
 # RUN serve -s build -l 3000
 
-
+EXPOSE 3000
 
 # FROM nginx
 # EXPOSE 81
