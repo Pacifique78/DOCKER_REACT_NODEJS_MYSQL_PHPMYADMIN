@@ -5,7 +5,7 @@ COPY package-lock.json /app/
 RUN npm install
 COPY . /app/
 RUN npm run build
-RUN cd serve && npm start
+# RUN cd serve && npm start
 # RUN npm uninstall -g serve 
 # RUN npm i -g serve
 # RUN serve -s build -l 3000
