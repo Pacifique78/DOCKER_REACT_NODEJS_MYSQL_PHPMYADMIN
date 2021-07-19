@@ -108,6 +108,8 @@ services:
     restart: always
     ports:
       - 8081:80
+    depends_on: 
+      - database
     networks:
       - my-network
 
@@ -148,14 +150,25 @@ services:
     command: npm run start
     networks:
       - my-network
+  nginx:
+    image: nginx
+    volumes:
+    - ./nginx_root_folder:/usr/share/nginx/html
+    - ./nginx/default.conf:/etc/nginx/conf.default.conf
+    ports:
+    - "3510:80"
+    depends_on: 
+      - myapp
+      - client
     
   client:
     stdin_open: true
     build: 
       dockerfile: Dockerfile
       context: ./client
+    command: node ./serve/index.js
     ports: 
-      - '3000:3000'
+      - '7700:3000'
     depends_on: 
       - myapp
     volumes: 
