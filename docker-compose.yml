@@ -168,7 +168,7 @@ services:
     build: 
       dockerfile: Dockerfile
       context: ./client
-    command: node ./serve/index.js
+    command: serve -s build -l 3000
     ports: 
       - '7700:3000'
     depends_on: 
