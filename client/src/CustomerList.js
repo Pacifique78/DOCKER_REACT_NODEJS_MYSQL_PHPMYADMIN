@@ -3,65 +3,86 @@ import React, { Component } from 'react';
 import { Button, ButtonGroup, Container, Table } from 'reactstrap';
 import AppNavbar from './AppNavbar';
 import { Link } from 'react-router-dom';
+import { backend_url_in_docker } from "./config/env";
 
 class CustomerList extends Component {
-
   constructor(props) {
     super(props);
-    this.state = {customers: [], isLoading: true};
+    this.state = { customers: [], isLoading: true };
     this.remove = this.remove.bind(this);
   }
 
   componentDidMount() {
-    this.setState({isLoading: true});
+    this.setState({ isLoading: true });
 
-    fetch('api/customers')
-      .then(response => response.json())
-      .then(data => this.setState({customers: data, isLoading: false}));
+    fetch(`${backend_url_in_docker}api/customers`)
+      .then((response) => response.json())
+      .then((data) => this.setState({ customers: data, isLoading: false }));
   }
 
   async remove(id) {
-    await fetch(`/api/customer/${id}`, {
-      method: 'DELETE',
+    await fetch(`${backend_url_in_docker}api/customer/${id}`, {
+      method: "DELETE",
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
     }).then(() => {
-      let updatedCustomers = [...this.state.customers].filter(i => i.id !== id);
-      this.setState({customers: updatedCustomers});
+      let updatedCustomers = [...this.state.customers].filter(
+        (i) => i.id !== id
+      );
+      this.setState({ customers: updatedCustomers });
     });
   }
 
   render() {
-    const {customers, isLoading} = this.state;
+    const { customers, isLoading } = this.state;
 
     if (isLoading) {
       return <p>Loading...</p>;
     }
 
-    const customerList = customers.map(customer => {
-      return <tr key={customer.id}>
-        <td style={{whiteSpace: 'nowrap'}}>{customer.firstname}</td>
-        <td>{customer.lastname}</td>
-        <td>{customer.age}</td>
-        <td>{customer.address}</td>
-        <td><a href={customer.copyright}>{customer.copyright}</a></td>
-        <td>
-          <ButtonGroup>
-            <Button size="sm" color="primary" tag={Link} to={"/customers/" + customer.id}>Edit</Button>
-            <Button size="sm" color="danger" onClick={() => this.remove(customer.id)}>Delete</Button>
-          </ButtonGroup>
-        </td>
-      </tr>
+    const customerList = customers.map((customer) => {
+      return (
+        <tr key={customer.id}>
+          <td style={{ whiteSpace: "nowrap" }}>{customer.firstname}</td>
+          <td>{customer.lastname}</td>
+          <td>{customer.age}</td>
+          <td>{customer.address}</td>
+          <td>
+            <a href={customer.copyright}>{customer.copyright}</a>
+          </td>
+          <td>
+            <ButtonGroup>
+              <Button
+                size="sm"
+                color="primary"
+                tag={Link}
+                to={"/customers/" + customer.id}
+              >
+                Edit
+              </Button>
+              <Button
+                size="sm"
+                color="danger"
+                onClick={() => this.remove(customer.id)}
+              >
+                Delete
+              </Button>
+            </ButtonGroup>
+          </td>
+        </tr>
+      );
     });
 
     return (
       <div>
-        <AppNavbar/>
+        <AppNavbar />
         <Container fluid>
           <div className="float-right">
-            <Button color="success" tag={Link} to="/customers/new">Add Customer</Button>
+            <Button color="success" tag={Link} to="/customers/new">
+              Add Customer
+            </Button>
           </div>
           <h3>Customer List</h3>
           <Table className="mt-4">
@@ -75,9 +96,7 @@ class CustomerList extends Component {
                 <th width="10%">Actions</th>
               </tr>
             </thead>
-            <tbody>
-            {customerList}
-            </tbody>
+            <tbody>{customerList}</tbody>
           </Table>
         </Container>
       </div>
